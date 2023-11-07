@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,6 +33,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\OneToMany(mappedBy: 'assignedUser', targetEntity: Task::class)]
+    private Collection $tasks;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: WorkSession::class)]
+    private Collection $workSessions;
+
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection();
+        $this->workSessions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,6 +124,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): static
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setAssignedUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): static
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getAssignedUser() === $this) {
+                $task->setAssignedUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WorkSession>
+     */
+    public function getWorkSessions(): Collection
+    {
+        return $this->workSessions;
+    }
+
+    public function addWorkSession(WorkSession $workSession): static
+    {
+        if (!$this->workSessions->contains($workSession)) {
+            $this->workSessions->add($workSession);
+            $workSession->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkSession(WorkSession $workSession): static
+    {
+        if ($this->workSessions->removeElement($workSession)) {
+            // set the owning side to null (unless already changed)
+            if ($workSession->getUser() === $this) {
+                $workSession->setUser(null);
+            }
+        }
 
         return $this;
     }
