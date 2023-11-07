@@ -7,8 +7,7 @@
         {% block stylesheets %}
         {% endblock %}
 
-        {% block javascripts %}
-        {% endblock %}
+        
     </head>
     <body>
         {% if is_granted('ROLE_EMPLOYEE') %}
@@ -17,5 +16,7 @@
         {% endif %}
         <a href="{{ path('app_logout') }}">Logout</a>
         {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
     </body>
+    
 </html>

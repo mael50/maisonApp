@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\Comment;
+use App\Form\CommentType;
 use App\Entity\WorkSession;
 use App\Form\WorkSessionType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,20 +34,27 @@ class WorkSessionController extends AbstractController
     #[Route('/new', name: 'app_work_session_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $tasks = $entityManager
+        ->getRepository(Task::class)
+        ->getTodoTasksForUser($this->getUser());
+
+
+        $workSessionInProgress = $entityManager
+        ->getRepository(WorkSession::class)
+        ->findOneBy(['user' => $this->getUser(), 'endDate' => null]);
+
+        if($workSessionInProgress) {
+            return $this->render('work_session/new.html.twig', [
+                'work_session' => $workSessionInProgress,
+                'tasks' => $tasks,
+            ]);
+        }
         $workSession = new WorkSession();
         $workSession->setUser($this->getUser());
         $workSession->setStartDate(new \DateTimeImmutable());
-        $workSession->setEndDate(new \DateTimeImmutable());
         $entityManager->persist($workSession);
         $entityManager->flush();
 
-        // get all tasks to do (task with isDone to false and assign to current user)
-        $tasks = $entityManager
-            ->getRepository(Task::class)
-            ->findBy([
-                'isDone' => false,
-                'assignedUser' => $this->getUser(),
-            ]);
 
         return $this->render('work_session/new.html.twig', [
             'work_session' => $workSession,
@@ -62,11 +71,26 @@ class WorkSessionController extends AbstractController
         return $this->redirectToRoute('app_work_session_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}', name: 'app_work_session_show', methods: ['GET'])]
-    public function show(WorkSession $workSession): Response
+    #[Route('/{id}', name: 'app_work_session_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, WorkSession $workSession, EntityManagerInterface $entityManager): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setAuthor($this->getUser());
+            $comment->setWorkSession($workSession);
+            $comment->setCreatedAt(new \DateTimeImmutable());
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_work_session_show', ['id' => $workSession->getId()]);
+        }
+        
         return $this->render('work_session/show.html.twig', [
             'work_session' => $workSession,
+            'form' => $form,
+            'comments' => $workSession->getComments(),
         ]);
     }
 

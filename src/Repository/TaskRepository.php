@@ -21,6 +21,17 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
+    public function getTodoTasksForUser($user): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.isDone = false')
+            ->andWhere('t.assignedUser = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Task[] Returns an array of Task objects
 //     */

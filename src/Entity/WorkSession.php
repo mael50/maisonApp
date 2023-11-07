@@ -19,7 +19,7 @@ class WorkSession
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $startDate = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\ManyToMany(targetEntity: Task::class, inversedBy: 'workSessions')]
@@ -28,9 +28,13 @@ class WorkSession
     #[ORM\ManyToOne(inversedBy: 'workSessions')]
     private ?User $user = null;
 
+    #[ORM\OneToMany(mappedBy: 'worksession', targetEntity: Comment::class)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +98,36 @@ class WorkSession
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setWorksession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getWorksession() === $this) {
+                $comment->setWorksession(null);
+            }
+        }
 
         return $this;
     }

@@ -5,6 +5,7 @@
 {% block body %}
     {% if work_session is defined %}
         <h1>WorkSession started on {{ work_session.startDate|date('Y-m-d H:i:s') }}</h1>
+        <h2>WorkSession duration : <span class="duration"></span></h2>
         <a href="{{ path('app_work_session_end', {'id': work_session.id}) }}" class="btn btn-danger">End session</a>
     {% endif %}
 
@@ -35,4 +36,26 @@
     </table>
 
     <a href="{{ path('app_work_session_index') }}">back to list</a>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        var startDate = new Date('{{ work_session.startDate|date('Y-m-d H:i:s') }}');
+        var duration = document.querySelector('.duration');
+
+        setInterval(function() {
+            var now = new Date();
+            var diff = now - startDate;
+            var seconds = Math.floor(diff / 1000);
+            var minutes = Math.floor(seconds / 60);
+            var hours = Math.floor(minutes / 60);
+
+            var displayHours = hours > 0 ? hours + ':' : '';
+            var displayMinutes = minutes > 0 ? (minutes < 10 ? '0' : '') + minutes + ':' : '00:';
+            var displaySeconds = (seconds < 10 ? '0' : '') + seconds % 60;
+
+            duration.innerHTML = displayHours + displayMinutes + displaySeconds;
+        }, 1000);
+    </script>
 {% endblock %}
