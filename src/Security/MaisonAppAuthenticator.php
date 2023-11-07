@@ -48,7 +48,7 @@ class MaisonAppAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        return new RedirectResponse($this->urlGenerator->generate('app_task_index'));
     }
 
     protected function getLoginUrl(Request $request): string

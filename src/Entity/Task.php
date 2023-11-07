@@ -27,12 +27,8 @@ class Task
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?User $assignedUser = null;
 
-    #[ORM\ManyToMany(targetEntity: WorkSession::class, mappedBy: 'tasks')]
-    private Collection $workSessions;
-
     public function __construct()
     {
-        $this->workSessions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,33 +80,6 @@ class Task
     public function setAssignedUser(?User $assignedUser): static
     {
         $this->assignedUser = $assignedUser;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, WorkSession>
-     */
-    public function getWorkSessions(): Collection
-    {
-        return $this->workSessions;
-    }
-
-    public function addWorkSession(WorkSession $workSession): static
-    {
-        if (!$this->workSessions->contains($workSession)) {
-            $this->workSessions->add($workSession);
-            $workSession->addTask($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWorkSession(WorkSession $workSession): static
-    {
-        if ($this->workSessions->removeElement($workSession)) {
-            $workSession->removeTask($this);
-        }
 
         return $this;
     }
