@@ -26,7 +26,9 @@
                 <td>{{ task.isDone ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('app_task_show', {'id': task.id}) }}">show</a>
-                    <a href="{{ path('app_task_edit', {'id': task.id}) }}">edit</a>
+                    {% if is_granted('ROLE_EMPLOYER') %}
+                        <a href="{{ path('app_task_edit', {'id': task.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -37,5 +39,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_task_new') }}">Create new</a>
+    {% if is_granted('ROLE_EMPLOYER') %}
+        <a href="{{ path('app_task_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New WorkSession{% endblock %}
+
+{% block body %}
+    {% if work_session is defined %}
+        <h1>WorkSession started on {{ work_session.startDate|date('Y-m-d H:i:s') }}</h1>
+        <a href="{{ path('app_work_session_end', {'id': work_session.id}) }}" class="btn btn-danger">End session</a>
+    {% endif %}
+
+    <h2>TODO tasks list</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Task</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for todo_task in tasks %}
+            <tr>
+                <td>{{ todo_task.id }}</td>
+                <td>
+                    <a href="{{ path('app_task_done', {'id': todo_task.id}) }}" class="btn btn-success">Terminer la tâche</a>
+                    {{ todo_task.title }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_work_session_index') }}">back to list</a>
+{% endblock %}

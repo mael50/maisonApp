@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit WorkSession{% endblock %}
+
+{% block body %}
+    <h1>Edit WorkSession</h1>
+
+    {{ include('work_session/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_work_session_index') }}">back to list</a>
+
+    {{ include('work_session/_delete_form.html.twig') }}
+{% endblock %}

@@ -60,19 +60,17 @@ class AppFixtures extends Fixture
         //     $manager->persist($task);
         // }
 
-        // $manager->flush();
+        $manager->flush();
 
-        // // create 10 workSessions
-        // for ($i=0; $i < 10; $i++) { 
-        //     $workSession = new WorkSession();
-        //     $workSession->setStartDate($faker->dateTimeBetween('-1 years', 'now'));
-        //     $workSession->setEndDate($faker->dateTimeBetween('-1 years', 'now'));
-        //     $workSession->setUser($faker->randomElement($employee));
-        //     for ($j=0; $j < 3; $j++) {
-        //         $workSession->addTask($faker->randomElement($task));
-        //     }
-        //     $manager->persist($workSession);
-        // }
+        // create 10 workSessions
+        for ($i=0; $i < 10; $i++) { 
+            $workSession = new WorkSession();
+            $workSession->setStartDate($faker->dateTimeBetween('-1 years', 'now'));
+            $workSession->setEndDate($faker->dateTimeBetween('-1 years', 'now'));
+            $workSession->setUser($faker->randomElement($employee));
+            $workSession->addTask($faker->randomElement($task));
+            $manager->persist($workSession);
+        }
 
         $manager->flush();
     }

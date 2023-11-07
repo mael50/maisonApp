@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WorkSession index{% endblock %}
+
+{% block body %}
+    <h1>WorkSession index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for work_session in work_sessions %}
+            <tr>
+                <td>{{ work_session.id }}</td>
+                <td>{{ work_session.startDate ? work_session.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ work_session.endDate ? work_session.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_work_session_show', {'id': work_session.id}) }}">show</a>
+                    <a href="{{ path('app_work_session_edit', {'id': work_session.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_work_session_new') }}">Create new</a>
+{% endblock %}

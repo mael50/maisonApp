@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
@@ -27,8 +28,16 @@ class Task
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?User $assignedUser = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dueAt = null;
+
     public function __construct()
     {
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
     }
 
     public function getId(): ?int
@@ -80,6 +89,18 @@ class Task
     public function setAssignedUser(?User $assignedUser): static
     {
         $this->assignedUser = $assignedUser;
+
+        return $this;
+    }
+
+    public function getDueAt(): ?\DateTimeInterface
+    {
+        return $this->dueAt;
+    }
+
+    public function setDueAt(\DateTimeInterface $dueAt): static
+    {
+        $this->dueAt = $dueAt;
 
         return $this;
     }
