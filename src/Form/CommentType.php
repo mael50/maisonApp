@@ -18,10 +18,6 @@ class CommentType extends AbstractType
                 'attr' => ['rows' => 5],
                 'label' => 'Commentaire',
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Envoyer',
-                'attr' => ['class' => 'btn btn-primary'],
-            ])
         ;
     }
 

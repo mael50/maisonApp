@@ -1,4 +1,29 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'mb-6'}}) }}
+    <div class="mb-4">
+        {{ form_label(form.startDate, 'Date de début', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+        {{ form_widget(form.startDate, {'attr': {'class': 'form-input w-full'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.endDate, 'Date de fin', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+        {{ form_widget(form.endDate, {'attr': {'class': 'form-input w-full'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.tasks, 'Tâches', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+        {{ form_widget(form.tasks, {'attr': {'class': 'form-input w-full'}}) }}
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.user, 'Utilisateur', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+        {{ form_widget(form.user, {'attr': {'class': 'form-input w-full'}}) }}
+    </div>
+
+    <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+            {{ button_label|default('Save') }}
+        </button>
+    </div>
+
+
 {{ form_end(form) }}

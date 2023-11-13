@@ -1,39 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Task{% endblock %}
+{% block title %}Tâche{% endblock %}
 
 {% block body %}
-    <h1>Task</h1>
+    <div class="max-w-3xl mx-auto my-8">
+        <h1 class="text-3xl font-bold mb-6">Détails de la tâche</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ task.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ task.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ task.description }}</td>
-            </tr>
-            <tr>
-                <th>Employee</th>
-                <td>{{ task.assignedUser.firstName }} {{ task.assignedUser.lastName }}</td>
-            <tr>
-                <th>IsDone</th>
-                <td>{{ task.isDone ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="min-w-full border border-gray-300">
+            <tbody>
+                <tr>
+                    <th class="py-2 px-4 border-b">Id</th>
+                    <td class="py-2 px-4 border-b">{{ task.id }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Titre</th>
+                    <td class="py-2 px-4 border-b">{{ task.title }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Description</th>
+                    <td class="py-2 px-4 border-b">{{ task.description }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Employé</th>
+                    <td class="py-2 px-4 border-b">{{ task.assignedUser.firstName }} {{ task.assignedUser.lastName }}</td>
+                </tr>
+                <tr>
+                    <th class="py-2 px-4 border-b">Terminé</th>
+                    <td class="py-2 px-4 border-b">{{ task.isDone ? 'Oui' : 'Non' }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_task_index') }}">back to list</a>
+        <a href="{{ path('app_task_index') }}" class="text-blue-500 hover:underline mt-4 inline-block">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
 
-    {% if is_granted('ROLE_EMPLOYER') %}
-        <a href="{{ path('app_task_edit', {'id': task.id}) }}">edit</a>
-        {{ include('task/_delete_form.html.twig') }}
-    {% endif %}
-
+        {% if is_granted('ROLE_EMPLOYER') %}
+            <a href="{{ path('app_task_edit', {'id': task.id}) }}" class="text-blue-500 hover:underline ml-4">
+                <i class="fas fa-edit"></i> Modifier
+            </a>
+            
+            {{ include('task/_delete_form.html.twig') }}
+        {% endif %}
+    </div>
 {% endblock %}

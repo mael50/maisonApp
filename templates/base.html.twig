@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		{% block stylesheets %}
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+		{% endblock %}
+	</head>
+	<body>
+		{% for type, messages in app.session.flashbag.all() %}
+			{% for message in messages %}
+				<div class="alert alert-{{ type }}">
+					{{ message }}
+				</div>
+			{% endfor %}
+		{% endfor %}
 
-        
-    </head>
-    <body>
-        {% if is_granted('ROLE_EMPLOYEE') %}
-            <a href="{{ path('app_task_index') }}">Tasks</a>
-            <a href="{{ path('app_work_session_index') }}">Work Sessions</a>
-        {% endif %}
-        <a href="{{ path('app_logout') }}">Logout</a>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
-    
+		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+			<div class="flex items-center justify-between mx-4 mt-4">
+				<div>
+					{% if app.user %}
+						<p class="text-gray-600 text-2xl font-bold"> 
+                        <i class="fas fa-user-circle"></i>
+                        Bonjour
+							{{ app.user.firstName }} !
+                        </p>
+					{% endif %}
+				</div>
+
+				<div class="flex items-center space-x-4">
+					{% if app.user %}
+						<a href="{{ path('app_task_index') }}" class="text-blue-500 hover:underline">
+							<i class="fas fa-tasks"></i>
+							Tâches
+						</a>
+						<a href="{{ path('app_work_session_index') }}" class="text-blue-500 hover:underline">
+							<i class="fas fa-clock"></i>
+							Sessions de travail
+						</a>
+					{% endif %}
+
+					<a href="{{ path('app_logout') }}" class="text-red-500 hover:underline">
+						<i class="fas fa-sign-out-alt"></i>
+						Déconnexion
+					</a>
+				</div>
+			</div>
+		{% endif %}
+
+
+		{% block body %}{% endblock %}
+
+		{% block javascripts %}
+			<script src="https://cdn.tailwindcss.com"></script>
+		{% endblock %}
+	</body>
 </html>
+

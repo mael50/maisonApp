@@ -1,35 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block body %}
-<form method="post">
+<form method="post" class="max-w-md mx-auto my-8 bg-white p-8 rounded-md shadow-md">
     {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        <div class="bg-red-500 text-white p-4 mb-4">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+        <div class="mb-4">
+            Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-blue-500">Déconnexion</a>
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <h1 class="text-3xl font-bold mb-6">Veuillez vous connecter</h1>
+    
+    <label for="inputEmail" class="block text-gray-700">Adresse e-mail</label>
+    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-input w-full mb-4 p-3 border border-gray-300 rounded" autocomplete="email" required autofocus>
+    
+    <label for="inputPassword" class="block text-gray-700">Mot de passe</label>
+    <input type="password" name="password" id="inputPassword" class="form-input w-full mb-4 p-3 border border-gray-300 rounded" autocomplete="current-password" required>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300" type="submit">
+        Se connecter
     </button>
 
-    <a href="{{ path('app_register') }}">Register</a>
-
-    <a href="{{ path('app_forgot_password_request') }}">Forgot Password</a>
+    <div class="mt-4">
+        <a href="{{ path('app_register') }}" class="text-gray-800 hover:underline">S'inscrire</a>
+        <span class="mx-2 text-gray-700">|</span>
+        <a href="{{ path('app_forgot_password_request') }}" class="text-gray-800 hover:underline">Mot de passe oublié</a>
+    </div>
 </form>
 {% endblock %}

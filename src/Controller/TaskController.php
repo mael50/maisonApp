@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\WorkSession;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,6 +17,9 @@ class TaskController extends AbstractController
     #[Route('/', name: 'app_task_index', methods: ['GET'])]
     public function index(TaskRepository $taskRepository): Response
     {
+        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('app_login');
+        }
         if($this->isGranted('ROLE_EMPLOYER')) {
             $tasks = $taskRepository->findAll();
         } else {
@@ -86,9 +90,11 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/task/{id}/done', name: 'app_task_done', methods: ['GET'])]
+    #[Route('/task/{id}/{ws_id}/done', name: 'app_task_done', methods: ['GET'])]
     public function done(Request $request, Task $task, EntityManagerInterface $entityManager): Response
     {
+        $workSession = $entityManager->getRepository(WorkSession::class)->find($request->get('ws_id'));
+        $workSession->addTask($task);
         $task->setIsDone(true);
         $entityManager->flush();
 

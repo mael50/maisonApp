@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Notifier\Notification\Notification;
 
 #[Route('/work/session')]
 class WorkSessionController extends AbstractController
@@ -20,6 +21,10 @@ class WorkSessionController extends AbstractController
     #[Route('/', name: 'app_work_session_index', methods: ['GET'])]
     public function index(WorkSessionRepository $workSessionRepository): Response
     {
+        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('app_login');
+        }
+        
         if($this->isGranted('ROLE_EMPLOYER')) {
             $work_sessions = $workSessionRepository->findAll();
         } else {
@@ -78,12 +83,15 @@ class WorkSessionController extends AbstractController
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
+        $tasks = $workSession->getTasks();
+
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setAuthor($this->getUser());
             $comment->setWorkSession($workSession);
             $comment->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($comment);
             $entityManager->flush();
+            $this->addFlash('success', 'Commentaire ajouté !');
             return $this->redirectToRoute('app_work_session_show', ['id' => $workSession->getId()]);
         }
         
@@ -91,6 +99,7 @@ class WorkSessionController extends AbstractController
             'work_session' => $workSession,
             'form' => $form,
             'comments' => $workSession->getComments(),
+            'tasks' => $tasks,
         ]);
     }
 
@@ -112,7 +121,7 @@ class WorkSessionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_work_session_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_work_session_delete', methods: ['POST'])]
     public function delete(Request $request, WorkSession $workSession, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$workSession->getId(), $request->request->get('_token'))) {

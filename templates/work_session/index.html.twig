@@ -1,37 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}WorkSession index{% endblock %}
+{% block title %}Index des sessions de travail{% endblock %}
 
 {% block body %}
-    <h1>WorkSession index</h1>
+    <div class="max-w-3xl mx-auto my-8">
+        <h1 class="text-3xl font-bold mb-6">Index des sessions de travail</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>StartDate</th>
-                <th>EndDate</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for work_session in work_sessions %}
-            <tr>
-                <td>{{ work_session.id }}</td>
-                <td>{{ work_session.startDate ? work_session.startDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ work_session.endDate ? work_session.endDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_work_session_show', {'id': work_session.id}) }}">show</a>
-                    <a href="{{ path('app_work_session_edit', {'id': work_session.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="min-w-full border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Id</th>
+                    <th class="py-2 px-4 border-b">Date de début</th>
+                    <th class="py-2 px-4 border-b">Date de fin</th>
+                    <th class="py-2 px-4 border-b">Utilisateur</th>
+                    <th class="py-2 px-4 border-b">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work_session in work_sessions %}
+                    <tr>
+                        <td class="py-2 px-4 border-b">{{ work_session.id }}</td>
+                        <td class="py-2 px-4 border-b">{{ work_session.startDate ? work_session.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <td class="py-2 px-4 border-b">{{ work_session.endDate ? work_session.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <td class="py-2 px-4 border-b">{{ work_session.user }}</td>
+                        <td class="py-2 px-4 border-b">
+                            <a href="{{ path('app_work_session_show', {'id': work_session.id}) }}" class="text-blue-500 hover:underline mr-2">
+                                Voir
+                            </a>
+                            <a href="{{ path('app_work_session_edit', {'id': work_session.id}) }}" class="text-blue-500 hover:underline">
+                                Modifier
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="py-2 px-4 border-b">Aucun enregistrement trouvé</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_work_session_new') }}">Create new</a>
+        <a href="{{ path('app_work_session_new') }}" class="text-blue-500 hover:underline mt-4 inline-block">
+            <i class="fas fa-plus mr-2"></i>
+            Créer une nouvelle session de travail
+        </a>
+    </div>
 {% endblock %}
