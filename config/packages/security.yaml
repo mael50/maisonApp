@@ -41,7 +41,9 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/task/\d+$, roles: ROLE_EMPLOYEE }
-        - { path: ^/task, roles: ROLE_EMPLOYER }
+        - { path: ^/task/new, roles: ROLE_EMPLOYER }
+        - { path: ^/task/\d+/edit, roles: ROLE_EMPLOYER }
+        - { path: ^/task/\d+/delete, roles: ROLE_EMPLOYER }
         - { path: ^/user, roles: ROLE_EMPLOYER }
 
 when@test:

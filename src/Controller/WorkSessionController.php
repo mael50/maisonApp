@@ -52,9 +52,11 @@ class WorkSessionController extends AbstractController
         ->findOneBy(['user' => $this->getUser(), 'endDate' => null]);
 
         if($workSessionInProgress) {
+            $tasksDone = $workSessionInProgress->getTasks();
             return $this->render('work_session/new.html.twig', [
                 'work_session' => $workSessionInProgress,
                 'tasks' => $tasks,
+                'tasksDone' => $tasksDone,
             ]);
         }
         $workSession = new WorkSession();
@@ -64,9 +66,11 @@ class WorkSessionController extends AbstractController
         $entityManager->flush();
 
 
+        $tasksDone = $workSession->getTasks();
         return $this->render('work_session/new.html.twig', [
             'work_session' => $workSession,
             'tasks' => $tasks,
+            'tasksDone' => $tasksDone,
         ]);
     }
 

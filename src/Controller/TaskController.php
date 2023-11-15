@@ -98,6 +98,7 @@ class TaskController extends AbstractController
         $task->setIsDone(true);
         $entityManager->flush();
 
+
         return $this->redirectToRoute('app_work_session_new');
 
     }

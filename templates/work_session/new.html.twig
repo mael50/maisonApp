@@ -6,7 +6,7 @@
     <div class="max-w-3xl mx-auto my-8">
         {% if work_session is defined %}
             <h1 class="text-3xl font-bold mb-4">Session de travail débutée le {{ work_session.startDate|date('Y-m-d H:i:s') }}</h1>
-            <h2 class="text-xl font-semibold mb-2">Durée de la session : <span class="duration"></span></h2>
+            <h2 class="text-xl font-semibold mb-4">Durée de la session : <span class="duration"></span></h2>
             <a href="{{ path('app_work_session_end', {'id': work_session.id}) }}" class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-700 transition duration-300">
                 Terminer la session
             </a>
@@ -14,22 +14,23 @@
 
         <h2 class="text-xl font-semibold my-4">Liste des tâches à faire</h2>
 
-        <table class="min-w-full border border-gray-300 mb-4">
+        <table class="min-w-full border border-gray-300 mb-4 text-center">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">Id</th>
                     <th class="py-2 px-4 border-b">Tâche</th>
+                    <th class="py-2 px-4 border-b">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for todo_task in tasks %}
                     <tr>
-                        <td class="py-2 px-4 border-b">{{ todo_task.id }}</td>
+                        <td class="py-2 px-4 border-b">
+                            {{ todo_task.title }}
+                        </td>
                         <td class="py-2 px-4 border-b">
                             <a href="{{ path('app_task_done', {'id': todo_task.id, 'ws_id': work_session.id}) }}" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300">
                                 Fait
                             </a>
-                            {{ todo_task.title }}
                         </td>
                     </tr>
                 {% else %}
@@ -39,6 +40,13 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <h2 class="text-xl font-semibold my-4">Liste des tâches terminées</h2>
+        {% for taskDone in tasksDone %}
+            <p>{{ taskDone.title }}</p>
+        {% else %}
+            <p>Aucune tâche terminée</p>
+        {% endfor %}
 
         <a href="{{ path('app_work_session_index') }}" class="text-blue-500 hover:underline mt-4 inline-block">
             <i class="fas fa-arrow-left"></i> Retour à la liste
