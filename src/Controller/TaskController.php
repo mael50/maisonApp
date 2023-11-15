@@ -67,6 +67,7 @@ class TaskController extends AbstractController
                 $entityManager->persist($newTask);
                 $this->addFlash('success', 'Tâche chargée avec succès');
             }
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_task_index');
         }
