@@ -25,10 +25,7 @@
                         <td class="py-2 px-4 border-b">{{ work_session.user }}</td>
                         <td class="py-2 px-4 border-b">
                             <a href="{{ path('app_work_session_show', {'id': work_session.id}) }}" class="text-blue-500 hover:underline mr-2">
-                                Voir
-                            </a>
-                            <a href="{{ path('app_work_session_edit', {'id': work_session.id}) }}" class="text-blue-500 hover:underline">
-                                Modifier
+                                <i class="fas fa-eye"></i>
                             </a>
                         </td>
                     </tr>
@@ -50,6 +47,10 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-    let table = new DataTable('#myTable');
+    let table = new DataTable('#myTable', {
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json',
+        },
+    });
 </script>
 {% endblock %}
