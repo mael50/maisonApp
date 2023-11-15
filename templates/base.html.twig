@@ -9,6 +9,7 @@
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
 		{% block stylesheets %}
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+			<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 		{% endblock %}
 	</head>
 	<body>
@@ -56,7 +57,9 @@
 		{% block body %}{% endblock %}
 
 		{% block javascripts %}
+			<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 			<script src="https://cdn.tailwindcss.com"></script>
+			<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 		{% endblock %}
 	</body>
 </html>

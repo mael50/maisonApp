@@ -6,7 +6,7 @@
     <div class="max-w-3xl mx-auto my-8">
         <h1 class="text-3xl font-bold mb-6">Index des sessions de travail</h1>
 
-        <table class="min-w-full border border-gray-300">
+        <table id="myTable" class="min-w-full border border-gray-300">
             <thead>
                 <tr>
                     <th class="py-2 px-4 border-b">Id</th>
@@ -45,4 +45,11 @@
             Créer une nouvelle session de travail
         </a>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    let table = new DataTable('#myTable');
+</script>
 {% endblock %}

@@ -51,3 +51,10 @@
         {% endif %}
     </div>
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    let table = new DataTable('#myTable');
+</script>
+{% endblock %}
