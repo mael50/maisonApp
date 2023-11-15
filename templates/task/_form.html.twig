@@ -1,38 +1,36 @@
 {% form_theme form _self %}
 
-{% block _task_title_row %}
-    <div class="mb-4">
-        {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.title, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded'}}) }}
-        {{ form_errors(form.title, {'attr': {'class': 'text-red-500 mt-2'}}) }}
-    </div>
-{% endblock %}
+{{ form_start(form) }}
 
-{% block _task_description_row %}
-    <div class="mb-4">
-        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.description, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded'}}) }}
-        {{ form_errors(form.description, {'attr': {'class': 'text-red-500 mt-2'}}) }}
-    </div>
-{% endblock %}
-
-{% block _task_dueAt_row %}
-    <div class="mb-4">
-        {{ form_label(form.dueAt, 'Date d\'échéance', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.dueAt, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded'}}) }}
-        {{ form_errors(form.dueAt, {'attr': {'class': 'text-red-500 mt-2'}}) }}
-    </div>
-{% endblock %}
-
-{% block _task_assignedUser_row %}
-    <div class="mb-4">
-        {{ form_label(form.assignedUser, 'Assigné à', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-        {{ form_widget(form.assignedUser, {'attr': {'class': 'form-select w-full p-3 border border-gray-300 rounded'}}) }}
-        {{ form_errors(form.assignedUser, {'attr': {'class': 'text-red-500 mt-2'}}) }}
-    </div>
-{% endblock %}
 <div class="mb-4">
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+	{{ form_label(form.title, 'Titre', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+	{{ form_widget(form.title, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded'}}) }}
+	{{ form_errors(form.title, {'attr': {'class': 'text-red-500 mt-2'}}) }}
+</div>
+
+<div class="mb-4">
+	{{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+	{{ form_widget(form.description, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded'}}) }}
+	{{ form_errors(form.description, {'attr': {'class': 'text-red-500 mt-2'}}) }}
+</div>
+
+<div class="mb-4">
+	{{ form_label(form.dueAt, 'Date d\'échéance', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+    {{ form_widget(form.dueAt, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded'}}) }}
+    {{ form_errors(form.dueAt, {'attr': {'class': 'text-red-500 mt-2'}}) }}
+</div>
+
+<div class="mb-4">
+    {{ form_label(form.assignedUser, 'Assigné à', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+    {{ form_widget(form.assignedUser, {'attr': {'class': 'form-select w-full p-3 border border-gray-300 rounded'}}) }}
+    {{ form_errors(form.assignedUser, {'attr': {'class': 'text-red-500 mt-2'}}) }}
+</div>
+
+<div class="mb-4">
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         {{ button_label|default('Save') }}
     </button>
 </div>
+
+{{ form_end(form) }}
+

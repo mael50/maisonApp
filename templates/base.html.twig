@@ -10,11 +10,31 @@
 		{% block stylesheets %}
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 			<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+			<script src="https://cdn.tailwindcss.com"></script>
 		{% endblock %}
 	</head>
 	<body>
 		{% for type, messages in app.session.flashbag.all() %}
 			{% for message in messages %}
+				<style>
+					.alert {
+						border-radius: 5px;
+						padding: 10px;
+						margin-bottom: 10px;
+					}
+					.alert-danger {
+						background-color: #f8d7da;
+						border-left: 4px solid #dc3545;
+					}
+					.alert-success {
+						background-color: #d4edda;
+						border-left: 4px solid #28a745;
+					}
+					.alert-info {
+						background-color: #d1ecf1;
+						border-left: 4px solid #17a2b8;
+					}
+				</style>
 				<div class="alert alert-{{ type }}">
 					{{ message }}
 				</div>
@@ -24,6 +44,7 @@
 		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 			<div class="flex items-center justify-between mx-4 mt-4">
 				<div>
+					<a href="{{ path('app_task_index') }}">
 					{% if app.user %}
 						<p class="text-gray-600 text-2xl font-bold"> 
                         <i class="fas fa-user-circle"></i>
@@ -31,10 +52,18 @@
 							{{ app.user.firstName }} !
                         </p>
 					{% endif %}
+					</a>
 				</div>
-
+				
 				<div class="flex items-center space-x-4">
 					{% if app.user %}
+						{% if is_granted('ROLE_EMPLOYER') %}
+							<a href="{{ path('app_user_index') }}" class="text-blue-500 hover:underline">
+							<i class="fas fa-user"></i>
+							Employées
+							</a>
+						{% endif %}
+
 						<a href="{{ path('app_task_index') }}" class="text-blue-500 hover:underline">
 							<i class="fas fa-tasks"></i>
 							Tâches
@@ -58,7 +87,6 @@
 
 		{% block javascripts %}
 			<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-			<script src="https://cdn.tailwindcss.com"></script>
 			<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 		{% endblock %}
 	</body>

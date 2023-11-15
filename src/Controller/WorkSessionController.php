@@ -31,8 +31,11 @@ class WorkSessionController extends AbstractController
             $work_sessions = $workSessionRepository->findBy(['user' => $this->getUser()]);
         }
 
+        $totalDuration = $workSessionRepository->getDurationByMonth($this->getUser(), new \DateTimeImmutable());
+
         return $this->render('work_session/index.html.twig', [
-            'work_sessions' => $work_sessions
+            'work_sessions' => $work_sessions,
+            'totalDuration' => $totalDuration,
         ]);
     }
 

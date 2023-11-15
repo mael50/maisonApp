@@ -34,15 +34,15 @@ security:
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
-
+    role_hierarchy:
+        ROLE_EMPLOYER: ROLE_EMPLOYEE
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/task/new, roles: ROLE_EMPLOYER }
-        - { path: ^/task/edit, roles: ROLE_EMPLOYER }
-        - { path: ^/task/delete, roles: ROLE_EMPLOYER }
-        - { path: ^/work/session/*, roles: [ROLE_EMPLOYER, ROLE_EMPLOYEE] }
+        - { path: ^/task/\d+$, roles: ROLE_EMPLOYEE }
+        - { path: ^/task, roles: ROLE_EMPLOYER }
+        - { path: ^/user, roles: ROLE_EMPLOYER }
 
 when@test:
     security:

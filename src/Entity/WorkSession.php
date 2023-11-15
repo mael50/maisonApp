@@ -37,6 +37,11 @@ class WorkSession
         $this->comments = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->startDate->format('Y-m-d H:i:s');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -100,6 +105,15 @@ class WorkSession
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getDuration(): ?\DateInterval
+    {
+        if ($this->endDate === null) {
+            return null;
+        }
+
+        return $this->startDate->diff($this->endDate);
     }
 
     /**

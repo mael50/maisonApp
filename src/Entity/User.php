@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -256,4 +257,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getMonthWorkTime(): DateTime
+    {
+        $month = new DateTime();
+        $worktime = new DateTime('@0');
+
+        foreach($this->getWorkSessions() as $workSession) {
+            if($workSession->getStartDate()->format('m') === $month->format('m')) {
+                $worktime->add($workSession->getDuration());
+            }
+        }
+
+        return $worktime;
+    }
+
 }

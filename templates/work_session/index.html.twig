@@ -6,12 +6,17 @@
     <div class="max-w-3xl mx-auto my-8">
         <h1 class="text-3xl font-bold mb-6">Index des sessions de travail</h1>
 
+        {% if is_granted('ROLE_EMPLOYEE') %}
+        <h3 class="text-xl font-bold mb-4">Durée totale de travail pour le mois en cours : {{ totalDuration }}</h3>
+        {% endif %}
+
         <table id="myTable" class="min-w-full border border-gray-300">
             <thead>
                 <tr>
                     <th class="py-2 px-4 border-b">Id</th>
                     <th class="py-2 px-4 border-b">Date de début</th>
                     <th class="py-2 px-4 border-b">Date de fin</th>
+                    <th class="py-2 px-4 border-b">Durée</th>
                     <th class="py-2 px-4 border-b">Utilisateur</th>
                     <th class="py-2 px-4 border-b">Actions</th>
                 </tr>
@@ -22,11 +27,17 @@
                         <td class="py-2 px-4 border-b">{{ work_session.id }}</td>
                         <td class="py-2 px-4 border-b">{{ work_session.startDate ? work_session.startDate|date('Y-m-d H:i:s') : '' }}</td>
                         <td class="py-2 px-4 border-b">{{ work_session.endDate ? work_session.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <td class="py-2 px-4 border-b">{{ work_session.duration ? work_session.duration.format('%H:%I:%S') : '' }}</td>
                         <td class="py-2 px-4 border-b">{{ work_session.user }}</td>
                         <td class="py-2 px-4 border-b">
                             <a href="{{ path('app_work_session_show', {'id': work_session.id}) }}" class="text-blue-500 hover:underline mr-2">
                                 <i class="fas fa-eye"></i>
                             </a>
+                            {% if is_granted('ROLE_EMPLOYER') %}
+                            <a href="{{ path('app_work_session_delete', {'id': work_session.id}) }}" class="text-red-500 hover:underline ml-2">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}

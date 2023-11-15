@@ -14,16 +14,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TaskController extends AbstractController
 {
-    #[Route('/', name: 'app_task_index', methods: ['GET'])]
+    #[Route('/task', name: 'app_task_index', methods: ['GET'])]
     public function index(TaskRepository $taskRepository): Response
     {
         if(!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('app_login');
         }
         if($this->isGranted('ROLE_EMPLOYER')) {
-            $tasks = $taskRepository->findAll();
+            $tasks = $taskRepository->findBy(['isDone' => false]);
         } else {
-            $tasks = $taskRepository->findBy(['assignedUser' => $this->getUser()]);
+            $tasks = $taskRepository->findBy(['assignedUser' => $this->getUser(), 'isDone' => false]);
         }
 
         return $this->render('task/index.html.twig', [

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Employé
+{% endblock %}
+
+{% block body %}
+	<div class="flex items-center justify-center h-screen">
+		<div class="max-w-3xl mx-auto text-center">
+			<h1 class="text-3xl font-bold mb-6">Tableau de bord</h1>
+
+			<a href="{{ path('app_work_session_new') }}" class="bg-green-500 text-white px-6 py-3 mb-6 rounded-full hover:bg-blue-700 transition duration-300 my-3 inline-block text-xl">
+				Commencer une session de travail
+			</a>
+
+			<div class="grid grid-cols-2 gap-6 h-96">
+				<div class="bg-white p-6 rounded-md shadow-md mb-6">
+					<h2 class="text-xl font-semibold mb-4">Liste des tâches</h2>
+					<ul class="overflow-y-auto h-64">
+						{% for task in tasks %}
+							<li class="mb-2 border-b border-gray-300 pb-2">
+								{{ task.title }}
+								-
+								{{ task.description }}
+								<a href="{{ path('app_task_show', {'id': task.id}) }}" class="bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition duration-300 ml-2">
+									Voir
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<div class="bg-white p-6 rounded-md shadow-md mb-6">
+					<h2 class="text-xl font-semibold mb-4">Historique des sessions de travail</h2>
+					<ul class="overflow-y-auto h-64">
+						{% for worksession in worksessions %}
+							<li class="mb-2 border-b border-gray-300 pb-2">
+								{{ worksession.startDate|date('Y-m-d H:i:s') }}
+								-
+								{{ worksession.endDate|date('Y-m-d H:i:s') }}
+								<a href="{{ path('app_work_session_show', {'id': worksession.id}) }}" class="bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition duration-300 ml-2">
+									Voir
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

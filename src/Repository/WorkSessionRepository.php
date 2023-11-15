@@ -22,6 +22,22 @@ class WorkSessionRepository extends ServiceEntityRepository
         parent::__construct($registry, WorkSession::class);
     }
 
+    public function getDurationByMonth(User $user, \DateTimeInterface $month): int
+    {
+        $queryBuilder = $this->createQueryBuilder('w');
+        $queryBuilder->select('SUM(TIME_TO_SEC(TIMEDIFF(w.endDate, w.startDate))) as duration');
+        $queryBuilder->andWhere('w.user = :user');
+        $queryBuilder->andWhere('w.startDate >= :start');
+        $queryBuilder->andWhere('w.endDate <= :end');
+        $queryBuilder->setParameter('user', $user);
+        $queryBuilder->setParameter('start', $month->format('Y-m-01 00:00:00'));
+        $queryBuilder->setParameter('end', $month->format('Y-m-t 23:59:59'));
+
+        $result = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        return $result ? $result : 0;
+    }
+
 //    /**
 //     * @return WorkSession[] Returns an array of WorkSession objects
 //     */
