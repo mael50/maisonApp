@@ -103,24 +103,6 @@ class WorkSessionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_work_session_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, WorkSession $workSession, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(WorkSessionType::class, $workSession);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_work_session_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('work_session/edit.html.twig', [
-            'work_session' => $workSession,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/{id}/delete', name: 'app_work_session_delete', methods: ['POST'])]
     public function delete(Request $request, WorkSession $workSession, EntityManagerInterface $entityManager): Response
     {
