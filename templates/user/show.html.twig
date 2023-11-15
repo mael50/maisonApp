@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail {{ employee.firstname }} {{ employee.lastname }}{% endblock %}
+
+{% block body %}
+    <div class="max-w-3xl mx-auto my-8">
+        <a href="{{ path('app_user_index') }}" class="text-blue-500 hover:underline my-4 inline-block">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+
+        <h1 class="text-3xl font-bold mb-6">Détail {{ employee.firstname }} {{ employee.lastname }}</h1>
+
+        <h2 class="text-2xl font-bold mb-4">Liste des sessions de travail ({{ workSessions|length }})</h2>
+
+        {% if workSessions|length > 0 %}
+            <ul>
+                {% for worksession in workSessions %}
+                    <li class="mb-2">
+                        {{ worksession.startDate|date('d/m/Y H:i:s') }} - {{ worksession.endDate|date('d/m/Y H:i:s') }} - {{ worksession.duration.format('%hh%im%ss') }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucune session de travail trouvée pour cet employé.</p>
+        {% endif %}
+    </div>
+{% endblock %}

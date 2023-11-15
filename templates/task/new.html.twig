@@ -3,13 +3,24 @@
 {% block title %}Nouvelle tâche{% endblock %}
 
 {% block body %}
-    <div class="max-w-3xl mx-auto my-8">
-        <h1 class="text-3xl font-bold mb-6">Créer une nouvelle tâche</h1>
+    <div class="flex">
+        <div class="w-1/4 min-h-screen bg-gray-200 p-4">
+            <h2 class="text-xl font-semibold mb-4">Toutes les tâches sauvegardés</h2>
+            {{ form_start(formLoad) }}
+                {{ form_row(formLoad.assignedUser) }}
+                {{ form_row(formLoad.dueAt) }}
+            {{ form_end(formLoad) }}
+        </div>
+        <div class="w-3/4 p-4">
+            <div class="max-w-3xl mx-auto">
+                <h1 class="text-3xl font-bold mb-6">Créer une nouvelle tâche</h1>
 
-        {{ include('task/_form.html.twig') }}
+                {{ include('task/_form.html.twig') }}
 
-        <a href="{{ path('app_task_index') }}" class="text-blue-500 hover:underline mt-4 inline-block">
-            <i class="fas fa-arrow-left"></i> Retour à la liste
-        </a>
+                <a href="{{ path('app_task_index') }}" class="text-blue-500 hover:underline mt-4 inline-block">
+                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock %}

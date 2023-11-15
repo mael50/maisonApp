@@ -3,14 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Entity\WorkSession;
 use App\Form\TaskType;
+use App\Form\LoadTaskType;
+use App\Entity\WorkSession;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
 {
@@ -38,17 +39,45 @@ class TaskController extends AbstractController
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
+        $formLoad = $this->createForm(LoadTaskType::class);
+        $formLoad->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $task->setIsDone(false);
             $entityManager->persist($task);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_task_index');
         }
+
+        if ($formLoad->isSubmitted() && $formLoad->isValid()) {
+            $formLoadData = $formLoad->getData();
+            $tasks = $formLoadData['tasks'];
+            $dueAt = $formLoadData['dueAt'];
+            $assignedUser = $formLoadData['assignedUser'];
+
+            foreach($tasks as $task) {
+                $newTask = new Task();
+                $newTask->setTitle($task->getTitle());
+                $newTask->setDescription($task->getDescription());
+                $newTask->setDueAt($dueAt);
+                $newTask->setAssignedUser($assignedUser);
+                $newTask->setIsSave(false);
+                $newTask->setIsDone(false);
+                $entityManager->persist($newTask);
+                $this->addFlash('success', 'Tâche chargée avec succès');
+            }
+
+            return $this->redirectToRoute('app_task_index');
+        }
+
+        $savedTasks = $entityManager->getRepository(Task::class)->findBy(['isSave' => true]);
 
         return $this->render('task/new.html.twig', [
             'task' => $task,
             'form' => $form,
+            'formLoad' => $formLoad,
+            'savedTasks' => $savedTasks
         ]);
     }
 

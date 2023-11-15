@@ -19,9 +19,12 @@ class HomeController extends AbstractController
 
         $workSessions = $workSessionsRepository->findBy(['user' => $this->getUser()]);
 
+        $date = new \DateTime();
+
         return $this->render('home/index.html.twig', [
             'tasks' => $tasks,
-            'worksessions' => $workSessions
+            'worksessions' => $workSessions,
+            'date' => $date
         ]);
     }
 }

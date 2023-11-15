@@ -9,19 +9,21 @@
     <table id="myTable" class="min-w-full border border-gray-300 text-center my-5">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b w-1/4">Nom</th>
-                    <th class="py-2 px-4 border-b w-1/4">Prénom</th>
-                    <th class="py-2 px-4 border-b w-1/4">Email</th>
-                    <th class="py-2 px-4 border-b w-1/4">Durée de travail ce mois ci</th>
+                    <th class="py-2 px-4 border-b w-1/5">Nom</th>
+                    <th class="py-2 px-4 border-b w-1/5">Prénom</th>
+                    <th class="py-2 px-4 border-b w-1/5">Email</th>
+                    <th class="py-2 px-4 border-b w-1/5">Durée de travail ce mois ci</th>
+                    <th class="py-2 px-4 border-b w-1/5">Actions</th>
                 </tr>
             </thead> 
             {% for employee in employees %}
             <tbody>
                 <tr>
-                    <td class="py-2 px-4 border-b w-1/4">{{ employee.lastname }}</td>
-                    <td class="py-2 px-4 border-b w-1/4">{{ employee.firstname }}</td>
-                    <td class="py-2 px-4 border-b w-1/4">{{ employee.email }}</td>
-                    <td class="py-2 px-4 border-b w-1/4">{{ employee.monthWorkTime ? employee.monthWorkTime.format('H:i:s') : '00:00:00' }}</td>
+                    <td class="py-2 px-4 border-b w-1/5">{{ employee.lastname }}</td>
+                    <td class="py-2 px-4 border-b w-1/5">{{ employee.firstname }}</td>
+                    <td class="py-2 px-4 border-b w-1/5">{{ employee.email }}</td>
+                    <td class="py-2 px-4 border-b w-1/5">{{ employee.monthWorkTime ? employee.monthWorkTime.format('H:i:s') : '00:00:00' }}</td>
+                    <td class="py-2 px-4 border-b w-1/5"><a href="{{ path('app_user_show', {'id': employee.id}) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-eye"></i></a></td>
                 </tr>
             </tbody>
             {% endfor %}

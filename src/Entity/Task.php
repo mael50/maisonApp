@@ -31,6 +31,9 @@ class Task
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dueAt = null;
 
+    #[ORM\Column]
+    private ?bool $isSave = null;
+
     public function __construct()
     {
     }
@@ -101,6 +104,18 @@ class Task
     public function setDueAt(\DateTimeInterface $dueAt): static
     {
         $this->dueAt = $dueAt;
+
+        return $this;
+    }
+
+    public function isIsSave(): ?bool
+    {
+        return $this->isSave;
+    }
+
+    public function setIsSave(bool $isSave): static
+    {
+        $this->isSave = $isSave;
 
         return $this;
     }

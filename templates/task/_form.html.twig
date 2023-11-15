@@ -1,16 +1,14 @@
-{% form_theme form _self %}
-
 {{ form_start(form) }}
 
 <div class="mb-4">
 	{{ form_label(form.title, 'Titre', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-	{{ form_widget(form.title, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded'}}) }}
+	{{ form_widget(form.title, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded task-title'}}) }}
 	{{ form_errors(form.title, {'attr': {'class': 'text-red-500 mt-2'}}) }}
 </div>
 
 <div class="mb-4">
 	{{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
-	{{ form_widget(form.description, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded'}}) }}
+	{{ form_widget(form.description, {'attr': {'class': 'form-input w-full p-3 border border-gray-300 rounded task-description'}}) }}
 	{{ form_errors(form.description, {'attr': {'class': 'text-red-500 mt-2'}}) }}
 </div>
 
@@ -25,6 +23,11 @@
     {{ form_widget(form.assignedUser, {'attr': {'class': 'form-select w-full p-3 border border-gray-300 rounded'}}) }}
     {{ form_errors(form.assignedUser, {'attr': {'class': 'text-red-500 mt-2'}}) }}
 </div>
+
+<div class="mb-4">
+    {{ form_label(form.isSave, 'Sauvegarder', {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+    {{ form_widget(form.isSave, {'attr': {'class': 'form-checkbox p-3 mb-8 border border-gray-300 rounded'}}) }}
+    {{ form_errors(form.isSave, {'attr': {'class': 'text-red-500 mt-2'}}) }}
 
 <div class="mb-4">
     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

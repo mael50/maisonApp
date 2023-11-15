@@ -1,11 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Employé
-{% endblock %}
+{% block title %}Accueil - Employé{% endblock %}
 
 {% block body %}
 	<div class="flex items-center justify-center h-screen">
-		<div class="max-w-3xl mx-auto text-center">
+		<div class="max-w-5xl mx-auto text-center">
 			<h1 class="text-3xl font-bold mb-6">Tableau de bord</h1>
 
 			<a href="{{ path('app_work_session_new') }}" class="bg-green-500 text-white px-6 py-3 mb-6 rounded-full hover:bg-blue-700 transition duration-300 my-3 inline-block text-xl">
@@ -17,12 +16,17 @@
 					<h2 class="text-xl font-semibold mb-4">Liste des tâches</h2>
 					<ul class="overflow-y-auto h-64">
 						{% for task in tasks %}
-							<li class="mb-2 border-b border-gray-300 pb-2">
+							<li class="mb-2 border-b border-gray-300 pb-2 h-10 flex items-center">
 								{{ task.title }}
 								-
 								{{ task.description }}
+								{% if task.dueAt < date %}
+									<span class="bg-red-500 text-white px-2 py-1 rounded-full ml-2">En retard</span>
+								{% else %}
+									<span class="bg-green-500 text-white px-2 py-1 rounded-full ml-2">Dans les temps</span>
+								{% endif %}
 								<a href="{{ path('app_task_show', {'id': task.id}) }}" class="bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition duration-300 ml-2">
-									Voir
+									<i class="fas fa-eye"></i>
 								</a>
 							</li>
 						{% endfor %}
@@ -33,12 +37,12 @@
 					<h2 class="text-xl font-semibold mb-4">Historique des sessions de travail</h2>
 					<ul class="overflow-y-auto h-64">
 						{% for worksession in worksessions %}
-							<li class="mb-2 border-b border-gray-300 pb-2">
+							<li class="mb-2 border-b border-gray-300 pb-2 h-10 flex items-center">
 								{{ worksession.startDate|date('Y-m-d H:i:s') }}
 								-
 								{{ worksession.endDate|date('Y-m-d H:i:s') }}
 								<a href="{{ path('app_work_session_show', {'id': worksession.id}) }}" class="bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition duration-300 ml-2">
-									Voir
+									<i class="fas fa-eye"></i>
 								</a>
 							</li>
 						{% endfor %}
@@ -48,4 +52,3 @@
 		</div>
 	</div>
 {% endblock %}
-

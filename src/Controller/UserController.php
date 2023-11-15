@@ -28,7 +28,7 @@ class UserController extends AbstractController
         $workSessions = $em->getRepository(WorkSession::class)->findBy(['user' => $user]);
 
         return $this->render('user/show.html.twig', [
-            'user' => $user,
+            'employee' => $user,
             'workSessions' => $workSessions,
         ]);
     }
