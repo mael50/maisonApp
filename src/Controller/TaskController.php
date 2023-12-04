@@ -128,6 +128,32 @@ class TaskController extends AbstractController
         $task->setIsDone(true);
         $entityManager->flush();
 
+        $recurringTask = $entityManager->getRepository(RecurringTasks::class)->findOneBy(['task' => $task]);
+
+        if($recurringTask) {
+            $recurrency = $recurringTask->getRecurrency();
+            switch ($recurrency) {
+                case 'd':
+                default:
+                    $recurrency = '+1 day';
+                    break;
+                case 'w':
+                    $recurrency = '+1 week';
+                    break;
+                case 'm':
+                    $recurrency = '+1 month';
+                    break;
+            }
+            $newTask = new Task();
+            $newTask->setTitle($task->getTitle());
+            $newTask->setDescription($task->getDescription());
+            $newTask->setDueAt(date_add($task->getDueAt(), date_interval_create_from_date_string($recurrency)));
+            $newTask->setAssignedUser($task->getAssignedUser());
+            $newTask->setIsDone(false);
+            $entityManager->persist($newTask);
+            $entityManager->flush();
+        }
+
 
         return $this->redirectToRoute('app_work_session_new');
 

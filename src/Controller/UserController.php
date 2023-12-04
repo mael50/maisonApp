@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\User;
 use App\Entity\WorkSession;
 use App\Repository\UserRepository;
@@ -27,9 +29,52 @@ class UserController extends AbstractController
     {
         $workSessions = $em->getRepository(WorkSession::class)->findBy(['user' => $user]);
 
+        $montWorkTime = $user->getMonthWorkTime();
+
         return $this->render('user/show.html.twig', [
             'employee' => $user,
             'workSessions' => $workSessions,
+            'workTime' => $montWorkTime,
         ]);
+    }
+
+    #[Route('/user/{id}/invoice/{year}/{month}', name: 'app_user_invoice')]
+    public function invoice(User $user, string $year, string $month, EntityManagerInterface $em): Response
+    {
+        $workSessions = $em->getRepository(WorkSession::class)->findBy(['user' => $user]);
+
+        $montWorkTime = $user->getWorkTimeFromMonth($month);
+        $montWorkTimeH = $montWorkTime->format('H') + $montWorkTime->format('i') / 60;
+        $totalSalary = 0;
+        
+        if ($user->getHourlyRate() !== null) {
+            $totalSalary = $montWorkTimeH * $user->getHourlyRate();
+        }
+
+
+        $html = $this->renderView('user/invoice.html.twig', [
+            'employee' => $user,
+            'workSessions' => $workSessions,
+            'totalDuration' => $montWorkTime,
+            'totalSalary' => $totalSalary,
+            'month' => $month,
+            'year' => $year,
+        ]);
+
+        $options = new Options();
+
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $response = new Response($dompdf->output());
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'inline; filename="facture_'.$month.'_'.$year.'_'.strtolower($user->getFirstname()).'_'.strtolower($user->getLastname()).'.pdf"');
+
+        return $response;
     }
 }

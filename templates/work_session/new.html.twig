@@ -63,7 +63,7 @@
             var minutes = Math.floor(seconds / 60);
             var hours = Math.floor(minutes / 60);
 
-            var displayHours = hours > 0 ? hours + ':' : '';
+            var displayHours = hours > 0 ? hours + ':' : '0';
             var displayMinutes = minutes > 0 ? (minutes < 10 ? '0' : '') + minutes + ':' : '00:';
             var displaySeconds = (seconds < 10 ? '0' : '') + seconds % 60;
 

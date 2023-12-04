@@ -1,0 +1,16 @@
+<h1>Facture - {{ month }} {{ year }}</h1>
+<h2>Employé : {{ employee.firstName }} {{ employee.lastName }}</h2>
+
+
+<h2>Liste des sessions de travail</h2>
+<ul>
+    {% for worksession in workSessions %}
+        <li>
+            {{ worksession.startDate|date('d/m/Y H:i:s') }} - {{ worksession.endDate|date('d/m/Y H:i:s') }} - {{ worksession.duration.format('%H:%I:%S') }}
+        </li>
+    {% endfor %}
+</ul>
+
+<p>Durée totale du mois : {{ totalDuration|date('H:i:s') }}</p>
+
+<p>Montant du salaire à verser : {{ totalSalary }}</p>

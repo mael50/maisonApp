@@ -50,11 +50,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
     private Collection $comments;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: RecurringTasks::class)]
+    private Collection $recurringTasks;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $hourlyRate = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         $this->workSessions = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->recurringTasks = new ArrayCollection();
     }
 
     public function __toString()
@@ -270,6 +277,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $worktime;
+    }
+
+    public function getWorkTimeFromMonth($month): DateTime
+    {
+        $worktime = new DateTime('@0');
+
+        $month = new DateTime($month);
+
+        foreach ($this->getWorkSessions() as $workSession) {
+            if ($workSession->getStartDate()->format('m') === $month->format('m')) {
+                $worktime->add($workSession->getDuration());
+            }
+        }
+
+        return $worktime;
+    }
+
+    /**
+     * @return Collection<int, RecurringTasks>
+     */
+    public function getRecurringTasks(): Collection
+    {
+        return $this->recurringTasks;
+    }
+
+    public function addRecurringTask(RecurringTasks $recurringTask): static
+    {
+        if (!$this->recurringTasks->contains($recurringTask)) {
+            $this->recurringTasks->add($recurringTask);
+            $recurringTask->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecurringTask(RecurringTasks $recurringTask): static
+    {
+        if ($this->recurringTasks->removeElement($recurringTask)) {
+            // set the owning side to null (unless already changed)
+            if ($recurringTask->getUser() === $this) {
+                $recurringTask->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHourlyRate(): ?float
+    {
+        return $this->hourlyRate;
+    }
+
+    public function setHourlyRate(?float $hourlyRate): static
+    {
+        $this->hourlyRate = $hourlyRate;
+
+        return $this;
     }
 
 }

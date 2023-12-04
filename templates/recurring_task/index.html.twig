@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tâches récurrentes{% endblock %}
+
+{% block body %}
+    <div class="flex">
+        <div class="w-1/4 min-h-screen bg-gray-200 p-4">
+            <h2 class="text-xl font-semibold mb-4">Toutes les tâches récurrentes</h2>
+            {% for task in recurring_tasks %}
+                <div class="mb-2">
+                    {{ task.title }}
+                    -
+                    {{ task.description }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="w-3/4 p-4">
+            <div class="max-w-3xl mx-auto">
+                <h1 class="text-3xl font-bold mb-6">Tâches récurrentes</h1>
+
+                {{ form_start(form) }}
+                    {{ form_row(form.recurrency, {'attr': {'class': 'form-select block w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300'}}) }}
+                    {{ form_row(form.task, {'attr': {'class': 'form-select block w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300'}}) }}
+                    {{ form_row(form.user, {'attr': {'class': 'form-select block w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300'}}) }}
+                    <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300 mt-4 inline-block">Ajouter</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
