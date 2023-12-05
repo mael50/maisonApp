@@ -49,7 +49,6 @@ class UserController extends AbstractController
         // récupérer les sessions de travail qui ont une start_date entre le début et la fin du mois (par exemple toutes les sessions de travail du mois de janvier)
         $workSessions = $em->getRepository(WorkSession::class)->findByDate($debut_mois, $fin_mois, $user);
 
-
         $montWorkTime = $user->getWorkTimeFromMonth($month);
         $montWorkTimeH = $montWorkTime->format('H') + $montWorkTime->format('i') / 60;
         $totalSalary = 0;
