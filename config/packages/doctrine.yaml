@@ -25,6 +25,8 @@ doctrine:
             datetime_functions:
                 TIME_TO_SEC: DoctrineExtensions\Query\Mysql\TimeToSec
                 TIMEDIFF: DoctrineExtensions\Query\Mysql\TimeDiff
+                MONTH: DoctrineExtensions\Query\Mysql\Month
+                YEAR: DoctrineExtensions\Query\Mysql\Year
                 
 
 when@test:

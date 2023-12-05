@@ -38,6 +38,19 @@ class WorkSessionRepository extends ServiceEntityRepository
         return $result ? $result : 0;
     }
 
+    public function findByDate(\DateTimeInterface $start, \DateTimeInterface $end, User $user): array
+    {
+        $queryBuilder = $this->createQueryBuilder('w');
+        $queryBuilder->andWhere('w.user = :user');
+        $queryBuilder->andWhere('w.startDate >= :start');
+        $queryBuilder->andWhere('w.startDate <= :end');
+        $queryBuilder->setParameter('user', $user);
+        $queryBuilder->setParameter('start', $start->format('Y-m-d 00:00:00'));
+        $queryBuilder->setParameter('end', $end->format('Y-m-d 23:59:59'));
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return WorkSession[] Returns an array of WorkSession objects
 //     */

@@ -36,8 +36,7 @@
                     {% endfor %}
                 </ul>
 
-                {# Ajouter le lien pour générer la facture ici #}
-                <a href="{{ path('app_user_invoice', {'id': employee.id, 'month': month, 'year': month|date('Y')}) }}" class="text-blue-500 hover:underline my-4 inline-block">
+                <a href="{{ path('app_user_invoice', {'id': employee.id, 'month': month|date('M'), 'year': month|date('Y')}) }}" class="text-blue-500 hover:underline my-4 inline-block">
                     <i class="fas fa-file-invoice"></i> Générer la facture
                 </a>
             {% endfor %}

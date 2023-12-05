@@ -283,10 +283,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $worktime = new DateTime('@0');
 
-        $month = new DateTime($month);
-
-        foreach ($this->getWorkSessions() as $workSession) {
-            if ($workSession->getStartDate()->format('m') === $month->format('m')) {
+        foreach($this->getWorkSessions() as $workSession) {
+            if($workSession->getStartDate()->format('m') === $month) {
                 $worktime->add($workSession->getDuration());
             }
         }

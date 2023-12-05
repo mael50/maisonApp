@@ -41,7 +41,14 @@ class UserController extends AbstractController
     #[Route('/user/{id}/invoice/{year}/{month}', name: 'app_user_invoice')]
     public function invoice(User $user, string $year, string $month, EntityManagerInterface $em): Response
     {
-        $workSessions = $em->getRepository(WorkSession::class)->findBy(['user' => $user]);
+        $month = date('m', strtotime($month));
+
+        $debut_mois = new \DateTime($year.'-'.$month.'-01');
+        $fin_mois = new \DateTime($year.'-'.$month.'-'.date('t', strtotime($debut_mois->format('Y-m-d'))));
+
+        // récupérer les sessions de travail qui ont une start_date entre le début et la fin du mois (par exemple toutes les sessions de travail du mois de janvier)
+        $workSessions = $em->getRepository(WorkSession::class)->findByDate($debut_mois, $fin_mois, $user);
+
 
         $montWorkTime = $user->getWorkTimeFromMonth($month);
         $montWorkTimeH = $montWorkTime->format('H') + $montWorkTime->format('i') / 60;
